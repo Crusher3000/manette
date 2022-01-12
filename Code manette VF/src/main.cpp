@@ -1,5 +1,4 @@
 #include <Arduino.h>
-// 1 2 3 test
 // connect to wifi spot and mqtt server
 #include <FreeRTOS.h>
 #include <WiFi.h>
