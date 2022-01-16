@@ -27,7 +27,6 @@ PubSubClient client(espClient);
 
 String clientId = "Hello"; // ID client MQTT
 
-
 TaskHandle_t Task1; // task oled
 TaskHandle_t Task2; // task other
 
@@ -39,7 +38,6 @@ TaskHandle_t Task2; // task other
 #define v_x 32 // pinout x joystick
 #define btn 25 // pinout button joystick
 #define led 27 // pinout led
-
  
 char data_x[5];   // char values x joystick to send
 char data_y[5];   // char values y joystick to send
@@ -61,7 +59,6 @@ int value_VT2; // values touch button (T2)
 int counter1;  //evite des erreurs d'envoie sur T0
 int counter2;  //evite des erreurs d'envoie sur T2
 
-
 //********************************************
 int send_VT0; // values of T0 send to MQTT
 int send_VT2; // values of T2 send to MQTT
@@ -71,7 +68,6 @@ int pre_send_VT2; // values used to send (values of T2)when its differents
 char puplish_VT0[5]; // send to MQTT in form of char*
 char puplish_VT2[5]; // send to MQTT in form of char*
 //--------------------------------------------------
-
 
 //---------------------data-------------------------
 int state1_joy = 0;   // valeur par defaut 0 utilisé pour le systeme d'envoie de donnée
@@ -93,7 +89,6 @@ int currentButtonState; // the current state of button
 
 int OLEDclock;
 int oldOLEDclock;
-
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -204,8 +199,7 @@ void Task1code( void * parameter ){
     }
     }
   vTaskDelay( xDelayTask1 ); // delay
-  } 
-
+  }
 
 void Task2code( void * parameter ){
 /*
@@ -300,7 +294,6 @@ traitements de données et l'envoie des données
     
     snprintf(etat1_joy,5,"%u",state1_joy); // convertir le int en char* dans state1_joy et le mettre dans etat1_joy
     snprintf(etat2_joy,5,"%u",state2_joy); // convertir le int en char* dans state2_joy et le mettre dans etat2_joy
-
     
 //--------------------- Send only if joystick values are differences ----------------------------
     if (state1_joy != pre1_joy) // si state1_joy est different de pre1_joy
@@ -330,8 +323,6 @@ traitements de données et l'envoie des données
     lastButtonState    = currentButtonState; // save the last state
     currentButtonState = digitalRead(btn); // read new state
 
-    
-
     if(lastButtonState == HIGH && currentButtonState == LOW) 
     {
       
@@ -356,10 +347,10 @@ traitements de données et l'envoie des données
 }
 
 void setup() {
+
   Serial.begin(115200); // initialise le Serial
   pinMode(btn,INPUT_PULLUP); // initialise le bouton
   pinMode(led,OUTPUT); // initialise la led
-  
   
   setup_wifi(); // appele à la fonction setup_wifi()
   client.setServer(mqtt_server, 1883); // On se connecte au serveur MQTT
@@ -376,8 +367,6 @@ void setup() {
   xTaskCreatePinnedToCore(Task2code,"Task2",10000,NULL,1,&Task2,0); // creer et lance la tache
   delay(500); // delai de 500 mili secondes
 }
-
-
 
 void loop() {
 }
