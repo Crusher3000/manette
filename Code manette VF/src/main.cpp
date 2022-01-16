@@ -48,7 +48,10 @@ char data_T2[5];  // char values touch button (T2) to send
 char send_btn[5]; // char values button to send
 int value_x;      // variable x joystick
 int value_y;      // variable y joystick
-
+int battery;
+int battery_map;
+char str_battery[5];
+char test_battery[5];
 //--------- Touch button---------------------------
 int value_T0;  // variable touch button (T0)
 int value_T2;  // variable touch button (T2)
@@ -185,8 +188,10 @@ void Task1code( void * parameter ){
     printToOLED(5,26,"Distance :");  // afficher "Distance :" sur le oled aux coordonnées 5 , 26
     printToOLED(70,26,str_distance); // afficher la valeur dans str_distance sur le oled aux coordonnées 70 , 26
     printToOLED(5,36,"Klaxon   :");  // afficher "Klaxon   :" sur le oled aux coordonnées 5 , 36
-    printToOLED(5,46,puplish_VT0);   // afficher la valeur dans puplish_VT0 sur le oled aux coordonnées 5 , 46
-    printToOLED(5,56,puplish_VT2);   // afficher la valeur dans puplish_VT0 sur le oled aux coordonnées 5 , 56
+    printToOLED(5,46,"Power    :");  // afficher "Power    :" sur le oled aux coordonnées 5 , 46
+    printToOLED(70,46,str_battery);  // afficher la valeur dans str_battery sur le oled aux coordonnées 70 , 46
+    printToOLED(85,46,"%");          // afficher "%" sur le oled aux coordonnées 85 , 46
+
     vTaskDelay( xDelayTask1 );// delay
     
     if (ledState == 1) // si ledState == 1
@@ -210,9 +215,9 @@ du joystick, la lecture des topic mais il y a aussi les
 traitements de données et l'envoie des données
 */
    
-  const TickType_t xDelayTask2 = 50 / portTICK_PERIOD_MS ;
-  const TickType_t xDelayTask2_2 = 50 / portTICK_PERIOD_MS ;
-  const TickType_t xDelayTask2_3 = 50 / portTICK_PERIOD_MS ;
+  const TickType_t xDelayTask2 = 50 / portTICK_PERIOD_MS ;   // remplace la fonction delay (50 ms)
+  const TickType_t xDelayTask2_2 = 50 / portTICK_PERIOD_MS ; // remplace la fonction delay (50 ms)
+  const TickType_t xDelayTask2_3 = 50 / portTICK_PERIOD_MS ; // remplace la fonction delay (50 ms)
   for(;;){
     
     if (!client.connected()) {// Si le client pour le MQTT en WiFi n'est pas connecté
@@ -222,6 +227,14 @@ traitements de données et l'envoie des données
   
     value_x = analogRead(v_x); // lecture du joystick X
     value_y = analogRead(v_y); // lecture du joystick Y
+
+//======================= Lecture de la batterie ====================================
+
+    battery = analogRead(34); // lire des valeur analogie sur le pine 34
+    battery_map = map(battery, 2000,3700,0,100); // remis à l'échelle 
+    snprintf(str_battery,5,"%u",battery_map); // convertir le int en char* dans battery_map et le mettre dans str_battery
+
+//===================================================================================
 
 //======================= Touche button =============================================
 
